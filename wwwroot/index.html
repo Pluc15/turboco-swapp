@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="shortcut icon" href="favicon.png" />
+    <title>TurboCo Console</title>
+  </head>
+  <body>
+    <div id="app">
+      <div>Active users: {{ nbConnections }}</div>
+
+      <div>
+        Alerts
+        <ul>
+          <li v-for="alert in alerts">{{ alert }}</li>
+        </ul>
+      </div>
+
+      <!-- <div>
+        <input v-model="newAlertMessage" placeholder="Alert message"> <button @click="SendAlert">Send</button>
+      </div> -->
+
+      <footer>© TurboCo</footer>
+
+      <hr />
+
+      <div>
+        Logs
+        <ul>
+          <li v-for="log in logs">{{ log }}</li>
+        </ul>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.7/signalr.min.js"></script>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
