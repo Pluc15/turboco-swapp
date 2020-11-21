@@ -21,12 +21,13 @@
       <table class="table table-dark">
         <thead>
           <tr>
-            <td><h2>Alerts</h2></td>
+            <th colspan="2"><h2>Alerts</h2></td>
           </tr>
         </thead>
         <tbody>
           <tr v-for="alert in alerts">
-            <td>{{ alert }}</td>
+            <td>{{ alert.message }}</td>
+            <td>{{ alert.timestamp }}</td>
           </tr>
         </tbody>
       </table>
@@ -34,7 +35,14 @@
       <table class="table table-dark">
         <thead>
           <tr>
-            <td colspan="4"><h2>Robots</h2></td>
+            <td colspan="5"><h2>Robots</h2></td>
+          </tr>
+          <tr>
+            <th>Label</th>
+            <th>X</th>
+            <th>Y</th>
+            <th>Z</th>
+            <th>Timestamp</th>
           </tr>
         </thead>
         <tbody>
@@ -43,6 +51,7 @@
             <td>{{ robotInfo.x }}</td>
             <td>{{ robotInfo.y }}</td>
             <td>{{ robotInfo.z }}</td>
+            <td>{{ robotInfo.timestamp }}</td>
           </tr>
         </tbody>
       </table>

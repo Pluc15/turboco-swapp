@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -24,9 +25,14 @@ namespace TurboCoConsole.Controllers
             Alert alert
         )
         {
-            await _dashboardHubContext.Clients.All.OnAlert(alert.Message);
+            await _dashboardHubContext.Clients.All.OnAlert(alert.Message, alert.Timestamp);
 
             MemoryDatabase.Alerts.Add(alert);
+
+            while (MemoryDatabase.Alerts.Count > 10)
+            {
+                MemoryDatabase.Alerts.Remove(MemoryDatabase.Alerts.OrderBy(a => a.Timestamp).First());
+            }
 
             return Ok();
         }

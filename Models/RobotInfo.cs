@@ -1,3 +1,5 @@
+using System;
+
 namespace TurboCoConsole.Models
 {
     public class RobotInfo
@@ -5,5 +7,6 @@ namespace TurboCoConsole.Models
         public double X { get; set; }
         public double Y { get; set; }
         public double Z { get; set; }
+        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
     }
 }

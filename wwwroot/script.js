@@ -23,17 +23,18 @@ const App = {
     };
   },
   methods: {
-    OnAlert(message) {
-      this.alerts.push(message);
+    OnAlert(message, timestamp) {
+      this.alerts.push({ message, timestamp });
     },
-    OnRobotLocationChanged(label, x, y, z) {
+    OnRobotLocationChanged(label, x, y, z, timestamp) {
       let robot = this.robotInfos.find((robot) => robot.label == label);
       if (robot) {
         robot.x = x;
         robot.y = y;
         robot.z = z;
+        robot.timestamp = timestamp;
       } else {
-        this.robotInfos.push({ label, x, y, z });
+        this.robotInfos.push({ label, x, y, z, timestamp });
       }
     },
     OnConnectionCountChanged(count) {

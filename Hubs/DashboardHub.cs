@@ -12,14 +12,16 @@ namespace TurboCoConsole.Hubs
         );
 
         public Task OnAlert(
-            string message
+            string message,
+            DateTime timestamp
         );
 
         public Task OnRobotLocationChanged(
             string label,
             double x,
             double y,
-            double z
+            double z,
+            DateTime timestamp
         );
     }
 
@@ -34,14 +36,15 @@ namespace TurboCoConsole.Hubs
             await Clients.Caller.OnConnectionCountChanged(_connectedUsers);
 
             foreach (var alert in MemoryDatabase.Alerts)
-                await Clients.Caller.OnAlert(alert.Message);
+                await Clients.Caller.OnAlert(alert.Message, alert.Timestamp);
 
             foreach (var robotInfo in MemoryDatabase.RobotInfos)
                 await Clients.Caller.OnRobotLocationChanged(
                     robotInfo.Key,
                     robotInfo.Value.X,
                     robotInfo.Value.Y,
-                    robotInfo.Value.Z
+                    robotInfo.Value.Z,
+                    robotInfo.Value.Timestamp
                 );
 
             await Clients.All.OnConnectionCountChanged(_connectedUsers);

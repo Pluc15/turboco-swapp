@@ -29,7 +29,8 @@ namespace TurboCoConsole.Controllers
                 robotLabel,
                 robotInfo.X,
                 robotInfo.Y,
-                robotInfo.Z
+                robotInfo.Z,
+                robotInfo.Timestamp
             );
 
             MemoryDatabase.RobotInfos[robotLabel] = robotInfo;

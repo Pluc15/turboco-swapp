@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace TurboCoConsole.Models
@@ -6,5 +7,7 @@ namespace TurboCoConsole.Models
     {
         [Required]
         public string Message { get; set; }
+
+        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
     }
 }
