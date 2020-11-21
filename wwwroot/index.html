@@ -2,41 +2,95 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <link rel="shortcut icon" href="favicon.png" />
-    <title>TurboCo Console</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+      integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>TurboCo Dashboard</title>
   </head>
   <body>
     <div id="app">
-      <div>Active users: {{ nbConnections }}</div>
+      <div class="text-center"><img src="logo.png" /></div>
 
-      <div>
-        Alerts
-        <ul>
-          <li v-for="alert in alerts">{{ alert }}</li>
-        </ul>
-      </div>
+      <h2>Active users: <span class="badge badge-secondary">{{ nbConnections }}</span></h2>
 
-      <!-- <div>
-        <input v-model="newAlertMessage" placeholder="Alert message"> <button @click="SendAlert">Send</button>
-      </div> -->
+      <table class="table table-dark">
+        <thead>
+          <tr>
+            <td><h2>Alerts</h2></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="alert in alerts">
+            <td>{{ alert }}</td>
+          </tr>
+        </tbody>
+      </table>
 
-      <footer>© TurboCo</footer>
+      <table class="table table-dark">
+        <thead>
+          <tr>
+            <td colspan="4"><h2>Robots</h2></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="robotInfo in robotInfos">
+            <td>{{ robotInfo.label }}</td>
+            <td>{{ robotInfo.x }}</td>
+            <td>{{ robotInfo.y }}</td>
+            <td>{{ robotInfo.z }}</td>
+          </tr>
+        </tbody>
+      </table>
 
-      <hr />
+      <footer>© TurboCo 2020</footer>
 
-      <div>
-        Logs
-        <ul>
-          <li v-for="log in logs">{{ log }}</li>
-        </ul>
+      <a href="#" @click="ToggleDebug" class="small text-secondary">Toggle Debug</a>
+
+      <div id="debug" style="display: none">
+        <hr />
+
+        <div>
+          Logs
+          <ul>
+            <li v-for="log in logs">{{ log }}</li>
+          </ul>
+        </div>
+
+        <hr />
+
+        <div>
+          <input class="form-control" v-model="newAlertMessage" placeholder="Alert message" /><br />
+          <button class="btn btn-primary" @click="SendAlert">Send</button>
+        </div>
+
+        <hr />
+
+        <div>
+          <input class="form-control" v-model="newRobotInfo.label" /><br />
+          <input class="form-control" v-model="newRobotInfo.x" /><br />
+          <input class="form-control" v-model="newRobotInfo.y" /><br />
+          <input class="form-control" v-model="newRobotInfo.z" /><br />
+          <button class="btn btn-primary" @click="SendRobotInfo">Send</button>
+        </div>
       </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.7/signalr.min.js"></script>
     <script src="https://unpkg.com/vue@next"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+      crossorigin="anonymous"
+    ></script>
     <script src="script.js"></script>
   </body>
 </html>

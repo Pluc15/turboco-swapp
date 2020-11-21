@@ -8,26 +8,32 @@ using TurboCoConsole.Models;
 namespace TurboCoConsole.Controllers
 {
     [ApiController]
-    public class AlertsController : ControllerBase
+    public class RobotsController : ControllerBase
     {
         private readonly IHubContext<DashboardHub, IDashboardClient> _dashboardHubContext;
 
-        public AlertsController(
+        public RobotsController(
             IHubContext<DashboardHub, IDashboardClient> dashboardHubContext
         )
         {
             _dashboardHubContext = dashboardHubContext;
         }
 
-        [HttpPost("api/alerts")]
+        [HttpPut("api/robots/{robotLabel}")]
         public async Task<IActionResult> Index(
-            Alert alert
+            [FromRoute] string robotLabel,
+            RobotInfo robotInfo
         )
         {
-            await _dashboardHubContext.Clients.All.OnAlert(alert.Message);
+            await _dashboardHubContext.Clients.All.OnRobotLocationChanged(
+                robotLabel,
+                robotInfo.X,
+                robotInfo.Y,
+                robotInfo.Z
+            );
 
-            MemoryDatabase.Alerts.Add(alert);
-
+            MemoryDatabase.RobotInfos[robotLabel] = robotInfo;
+            
             return Ok();
         }
     }
