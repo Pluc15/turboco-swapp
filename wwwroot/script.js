@@ -11,9 +11,14 @@ const App = {
     return {
       nbConnections: null,
       alerts: [],
-      robotInfos: [],
       logs: [],
-      newAlertMessage: "Some alert",
+      robotInfos: [],
+      browserLogs: [],
+      newAlertMessage: "Some alert message",
+      newLog: {
+        level: 2,
+        message: "Some log message",
+      },
       newRobotInfo: {
         label: "Some robot",
         x: 1,
@@ -25,6 +30,9 @@ const App = {
   methods: {
     OnAlert(message, timestamp) {
       this.alerts.push({ message, timestamp });
+    },
+    OnLog(level, message, timestamp) {
+      this.logs.push({ level, message, timestamp });
     },
     OnRobotLocationChanged(label, x, y, z, timestamp) {
       let robot = this.robotInfos.find((robot) => robot.label == label);
@@ -61,6 +69,20 @@ const App = {
         this.logs.push(err);
       }
     },
+    async SendLog() {
+      try {
+        const response = await fetch("api/logs", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(this.newLog),
+        });
+        this.logs.push(response);
+      } catch (err) {
+        this.logs.push(err);
+      }
+    },
     async SendRobotInfo() {
       try {
         const response = await fetch(`api/robots/${this.newRobotInfo.label}`, {
@@ -83,6 +105,7 @@ const App = {
   async mounted() {
     try {
       connection.on("OnAlert", this.OnAlert);
+      connection.on("OnLog", this.OnLog);
       connection.on("OnRobotLocationChanged", this.OnRobotLocationChanged);
       connection.on("OnConnectionCountChanged", this.OnConnectionCountChanged);
       await connection.start();

@@ -16,6 +16,12 @@ namespace TurboCoConsole.Hubs
             DateTime timestamp
         );
 
+        public Task OnLog(
+            int logLevel,
+            string message,
+            DateTime timestamp
+        );
+
         public Task OnRobotLocationChanged(
             string label,
             double x,
@@ -37,6 +43,9 @@ namespace TurboCoConsole.Hubs
 
             foreach (var alert in MemoryDatabase.Alerts)
                 await Clients.Caller.OnAlert(alert.Message, alert.Timestamp);
+
+            foreach (var log in MemoryDatabase.Logs)
+                await Clients.Caller.OnLog(log.Level, log.Message, log.Timestamp);
 
             foreach (var robotInfo in MemoryDatabase.RobotInfos)
                 await Clients.Caller.OnRobotLocationChanged(

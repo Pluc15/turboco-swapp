@@ -7,5 +7,6 @@ namespace TurboCoConsole.Data
     {
         public static List<Alert> Alerts = new List<Alert>();
         public static Dictionary<string, RobotInfo> RobotInfos = new Dictionary<string, RobotInfo>();
+        public static List<LogMessage> Logs = new List<LogMessage>();
     }
 }
