@@ -11,12 +11,15 @@ namespace TurboCoConsole.Controllers
     public class RobotsController : ControllerBase
     {
         private readonly IHubContext<DashboardHub, IDashboardClient> _dashboardHubContext;
+        private readonly RepositoryFactory _repositoryFactory;
 
         public RobotsController(
-            IHubContext<DashboardHub, IDashboardClient> dashboardHubContext
+            IHubContext<DashboardHub, IDashboardClient> dashboardHubContext,
+            RepositoryFactory repositoryFactory
         )
         {
             _dashboardHubContext = dashboardHubContext;
+            _repositoryFactory = repositoryFactory;
         }
 
         [HttpPut("api/robots/{robotLabel}")]
@@ -33,7 +36,7 @@ namespace TurboCoConsole.Controllers
                 robotInfo.Timestamp
             );
 
-            MemoryDatabase.RobotInfos[robotLabel] = robotInfo;
+            await _repositoryFactory.RobotInfos.AddOrUpdate(robotInfo);
             
             return Ok();
         }

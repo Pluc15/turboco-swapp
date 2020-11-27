@@ -34,26 +34,32 @@ namespace TurboCoConsole.Hubs
 
     public class DashboardHub : Hub<IDashboardClient>
     {
+        private readonly RepositoryFactory _repositoryFactory;
         private static int _connectedUsers;
+
+        public DashboardHub(RepositoryFactory repositoryFactory)
+        {
+            _repositoryFactory = repositoryFactory;
+        }
 
         public override async Task OnConnectedAsync()
         {
             _connectedUsers++;
             await Clients.Caller.OnConnectionCountChanged(_connectedUsers);
 
-            foreach (var alert in MemoryDatabase.Alerts)
+            await foreach (var alert in _repositoryFactory.Alerts.GetAll())
                 await Clients.Caller.OnAlert(alert.Message, alert.Timestamp);
 
-            foreach (var log in MemoryDatabase.Logs)
+            await foreach (var log in _repositoryFactory.Logs.GetAll())
                 await Clients.Caller.OnLog(log.Level, log.Message, log.Timestamp);
 
-            foreach (var robotInfo in MemoryDatabase.RobotInfos)
+            await foreach (var robotInfo in _repositoryFactory.RobotInfos.GetAll())
                 await Clients.Caller.OnRobotLocationChanged(
-                    robotInfo.Key,
-                    robotInfo.Value.X,
-                    robotInfo.Value.Y,
-                    robotInfo.Value.Z,
-                    robotInfo.Value.Timestamp
+                    robotInfo.Label,
+                    robotInfo.X,
+                    robotInfo.Y,
+                    robotInfo.Z,
+                    robotInfo.Timestamp
                 );
 
             await Clients.All.OnConnectionCountChanged(_connectedUsers);

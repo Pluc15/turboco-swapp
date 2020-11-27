@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -12,12 +11,15 @@ namespace TurboCoConsole.Controllers
     public class LogsController : ControllerBase
     {
         private readonly IHubContext<DashboardHub, IDashboardClient> _dashboardHubContext;
+        private readonly RepositoryFactory _repositoryFactory;
 
         public LogsController(
-            IHubContext<DashboardHub, IDashboardClient> dashboardHubContext
+            IHubContext<DashboardHub, IDashboardClient> dashboardHubContext,
+            RepositoryFactory repositoryFactory
         )
         {
             _dashboardHubContext = dashboardHubContext;
+            _repositoryFactory = repositoryFactory;
         }
 
         [HttpPost("api/logs")]
@@ -27,12 +29,7 @@ namespace TurboCoConsole.Controllers
         {
             await _dashboardHubContext.Clients.All.OnLog(log.Level, log.Message, log.Timestamp);
 
-            MemoryDatabase.Logs.Add(log);
-
-            while (MemoryDatabase.Alerts.Count > 100)
-            {
-                MemoryDatabase.Alerts.Remove(MemoryDatabase.Alerts.OrderBy(a => a.Timestamp).First());
-            }
+            await _repositoryFactory.Logs.Add(log);
 
             return Ok();
         }
